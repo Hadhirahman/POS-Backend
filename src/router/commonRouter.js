@@ -1,9 +1,16 @@
 const express=require("express")
-const { signup, sentotp, varifyOTP } = require("../controllers/commonController")
+const { signup, sentotp, varifyOTP, login, CreateMenuItems, submitStaffForm, ListStaff, DeleteStaff, EditStaff, updateStaff,  } = require("../controllers/commonController")
 const router=express.Router()
 
 router.post("/signup",signup)
 router.post("/send-otp",sentotp)
-router.post("/varifyOtp",varifyOTP)
-
+router.post("/verifyOtp",varifyOTP)
+router.post("/login",login)
+router.post("/Createmenu",CreateMenuItems)
+router.post("/addstaff",submitStaffForm)
+router.get("/addstaff",ListStaff)
+router.delete("/deletestaff/:id",DeleteStaff)
+router.get("/edit_staff/:id",EditStaff)
+router.patch("/edit_staff/:id",updateStaff)
+router.post('/menuitemsadd',)
 module.exports=router

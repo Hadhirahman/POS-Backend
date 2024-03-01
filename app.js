@@ -7,7 +7,7 @@ const mongoose=require("./config/config")
 const cors=require("cors")
 const commonRoutes=require("./src/router/commonRouter")
 
-// require("dotenv").config
+
 
 app.use(bodyParser.urlencoded({extended:true}))
 app.use(bodyParser.json())
@@ -16,6 +16,6 @@ app.use("/",commonRoutes)
 
 mongoose.then(()=>{
  app.listen(PORT,()=>{
-        console.log("run with this PORT"+PORT);
+        console.log("run with this PORT"+process.env.PORT);
     })
 })
