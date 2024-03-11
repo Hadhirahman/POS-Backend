@@ -222,8 +222,44 @@ const routerObj = {
 
 
 
+  menuupload:async (req, res) => {
+    try {
+      const { itemName, description, price, category} = req.body;
+      const imageUrl=req.file.location
+      const menuItem = new MenuSchema({ itemName, description, price, category, imageUrl});
+      await menuItem.save();
+      
+      res.status(201).json({ message: 'Menu item created successfully', menuItem });
+    } catch (error) {
+      console.error('Error creating menu item:', error);
+      res.status(500).json({ error: 'Internal server error' });
+    }
+  },
 
-  
+
+  menulist:async (req, res) => {
+    try {
+      const menuItems = await MenuSchema.find();
+      res.json(menuItems);
+    } catch (error) {
+      console.error('Error fetching menu items:', error);
+      res.status(500).json({ error: 'Internal Server Error' });
+    }
+  },
+
+  menuDelete:async (req, res) => {
+    try {
+      const productId = req.params.id;
+      await MenuSchema.findByIdAndDelete(productId);
+      res.status(200).json({ message: 'Product deleted successfully' });
+    } catch (error) {
+      console.error('Error deleting product:', error);
+      res.status(500).json({ error: 'Internal server error' });
+    }
+  }
+
+
+
 
 }
 module.exports = routerObj

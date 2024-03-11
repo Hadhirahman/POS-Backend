@@ -3,7 +3,7 @@ const secretKey = process.env.TOCKEN_SECRET_KEY;
 const verifyToken = async (req, res, next) => {
   console.log("first");
   let token = await req.headers.authorization;
-  token = token.split(" ")[18];
+  token = token.split(" ")[1];
   if (!token) {
     return res.status(404).json({ message: " Unauthorized user " });
   }
