@@ -256,10 +256,61 @@ const routerObj = {
       console.error('Error deleting product:', error);
       res.status(500).json({ error: 'Internal server error' });
     }
+  },
+
+
+
+  menuItemget:async (req, res) => {
+    const id = req.params.Id;
+    try {
+      console.log(id);
+      const product = await MenuSchema.findById(id);
+      if (product) {
+        res.json(product);
+      } else {
+        res.status(404).json({ message: 'Product not found' });
+      }
+    } catch (error) {
+      console.error('Error fetching product:', error);
+      res.status(500).json({ message: 'Internal server error' });
+    }
+  },
+
+
+   menuitempatch : async (req, res) => {
+    try {
+      const id = req.params.id;
+      console.log(id);
+      
+     
+      const menuItem = await MenuSchema.findById(id);
+      if (!menuItem) {
+        return res.status(404).json({ message: 'Menu item not found' });
+      }
+  
+    
+      let imageUrl = null;
+      if (req.file) {
+        imageUrl = req.file.location;
+        console.log(imageUrl);
+      }
+  
+  
+      menuItem.itemName = req.body.itemName;
+      menuItem.description = req.body.description;
+      menuItem.price = req.body.price;
+      menuItem.category = req.body.category;
+      if (imageUrl) {
+        menuItem.imageUrl = imageUrl;
+      }
+      await menuItem.save();
+
+      res.status(200).json({ message: 'Menu item updated successfully', menuItem });
+    } catch (error) {
+      console.error('Error updating menu item:', error);
+      res.status(500).json({ message: 'Internal server error' });
+    }
   }
-
-
-
 
 }
 module.exports = routerObj
