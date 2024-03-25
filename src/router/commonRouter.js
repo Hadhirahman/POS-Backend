@@ -1,6 +1,6 @@
 const express=require("express")
 const jwtval=require("../middlewares/jwtvarification")
-const { signup, sentotp, varifyOTP, login, CreateMenuItems, submitStaffForm, ListStaff, DeleteStaff, EditStaff, updateStaff, menuupload, menulist, menuDelete, menuEdit, menuItemget, menuitempatch, } = require("../controllers/commonController")
+const { signup, sentotp, varifyOTP, login, CreateMenuItems, submitStaffForm, ListStaff, DeleteStaff, EditStaff, updateStaff, menuupload, menulist, menuDelete, menuEdit, menuItemget, menuitempatch, addtablepost, listtables, tabledelete, } = require("../controllers/commonController")
 const router=express.Router()
 const {upload}=require('../utility/multer/s3storage')
 router.post("/signup",signup)
@@ -18,4 +18,8 @@ router.get('/menuitemsadd',jwtval,menulist)
 router.delete("/menuitemsdelete/:id",jwtval,menuDelete)
 router.get("/menuitems/:Id",jwtval,menuItemget)
 router.patch("/menuitems/:id",jwtval,upload.single('image'),menuitempatch)
+
+router.post("/tableadd",jwtval,addtablepost)
+router.get("/showtables",jwtval,listtables)
+router.delete('/deletetable/:tableId',tabledelete)
 module.exports=router

@@ -2,6 +2,7 @@
 const userschema = require("../models/userschema")
 const MenuSchema = require("../models/menuSchema")
 const staffModel = require("../models/staffscema")
+const Table = require("../models/tableModel")
 
 
 const bcrypt = require("bcrypt")
@@ -309,6 +310,53 @@ const routerObj = {
     } catch (error) {
       console.error('Error updating menu item:', error);
       res.status(500).json({ message: 'Internal server error' });
+    }
+  },
+
+
+  addtablepost:async (req, res) => {
+    const { tableId, capacity, occupied } = req.body;
+    try {
+      const existingTable = await Table.findOne({ tableId: tableId });
+      if (existingTable) {
+        return res.status(400).json({ error: 'Table with the same tableId already exists' });
+      }
+      const newTable = new Table({ tableId, capacity, occupied });
+      await newTable.save();
+  
+      res.status(200).json({ message: 'Table added successfully' });
+    } catch (error) {
+      console.error('Error adding table:', error);
+      res.status(500).json({ error: 'Failed to add table' });
+    }
+  },
+
+  listtables:async (req, res) => {
+    try {
+      // Fetch all tables from the database
+      const tables = await Table.find();
+      res.status(200).json(tables);
+    } catch (error) {
+      console.error('Error fetching table data:', error);
+      res.status(500).json({ error: 'Failed to fetch table data' });
+    }
+  },
+
+
+  tabledelete: async (req, res) => {
+    const { tableId } = req.params;
+  
+    try {
+      const deletedTable = await Table.deleteMany({ tableId: tableId });
+  
+      if (!deletedTable) {
+        return res.status(404).json({ message: 'Table not found' });
+      }
+  
+      return res.status(200).json({ message: 'Table deleted successfully', deletedTable });
+    } catch (error) {
+      console.error('Error deleting table:', error);
+      return res.status(500).json({ message: 'Internal server error' });
     }
   }
 
