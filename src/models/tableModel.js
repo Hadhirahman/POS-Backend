@@ -15,7 +15,10 @@ const tableSchema = new mongoose.Schema({
   occupied:{
     type:Boolean,
     required:true
-  }
+  },
+  waiterName:{
+    type:String
+  },
 });
 
 

@@ -42,7 +42,7 @@ const routerObj = {
 
       await newUser.save();
       const payload = contact
-      const token = jwt.sign({ payload }, process.env.TOCKEN_SECRET_KEY, { expiresIn: "1h" })
+      const token = jwt.sign({ payload }, process.env.TOCKEN_SECRET_KEY, { expiresIn: "4h" })
       res.status(201).json({ message: 'User created successfully', token });
 
 
@@ -93,7 +93,7 @@ const routerObj = {
     try {
       if (await bcrypt.compare(password, user.password)) {
         const payload = userName
-        const token = jwt.sign({ payload }, process.env.TOCKEN_SECRET_KEY, { expiresIn: "1h" })
+        const token = jwt.sign({ payload }, process.env.TOCKEN_SECRET_KEY, { expiresIn: "4h" })
         res.status(201).json({ message: 'User login successfully', token });
       } else {
         res.status(401).json({ message: 'Invalid username or password' });
@@ -183,16 +183,11 @@ const routerObj = {
     const updatedData = req.body;
 
     try {
-      // Check if the staff member exists
       const staffMember = await staffModel.findById(staffId);
       if (!staffMember) {
         return res.status(404).json({ success: false, message: 'Staff member not found' });
       }
-
-      // Update the staff member's data
       res.json(staffMember)
-
-
       // res.json({ success: true, message: 'Staff member updated successfully' });
     } catch (error) {
       console.error('Error updating staff member:', error);
@@ -357,6 +352,18 @@ const routerObj = {
     } catch (error) {
       console.error('Error deleting table:', error);
       return res.status(500).json({ message: 'Internal server error' });
+    }
+  },
+
+
+  listweiters:async (req, res) => {
+    try {
+      const waiters = await staffModel.find({ position: "weiter" });
+      res.json(waiters);
+      console.log(waiters);
+    } catch (error) {
+      console.error('Error fetching waiters:', error);
+      res.status(500).json({ error: 'Internal server error' });
     }
   }
 
